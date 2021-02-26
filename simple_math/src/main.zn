@@ -1,0 +1,20 @@
+//!
+//! The 'simple_math' contract entry.
+//!
+
+mod simple_math;
+use simple_math::cube;
+
+contract SimpleMath {
+    pub balance: u64;
+
+    pub fn new(balance: u64) -> Self {
+        Self {
+            balance: balance
+        }
+    }
+
+    pub fn deposit(mut self, amount: u64) {
+        self.balance += cube(amount);
+    }
+}

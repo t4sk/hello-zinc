@@ -1,0 +1,20 @@
+{
+  "type": "contract",
+  "storages": {
+    "0x0000000000000000000000000000000000000000": ["0x0", [], "0"]
+  },
+  "msg": {
+    "sender": "0x6E3468Ce9bCc4F4e5106abf4821a62dB4d6A9e03",
+    "recipient": "0x84891993a9da584b05425d66f6fcc535c2c89a13",
+    "token_address": "0x0000000000000000000000000000000000000000",
+    "amount": "0"
+  },
+  "arguments": {
+    "new": {
+      "balance": "123"
+    },
+    "deposit": {
+      "amount": "2"
+    }
+  }
+}
