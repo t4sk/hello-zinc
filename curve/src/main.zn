@@ -1,0 +1,16 @@
+mod types;
+mod invariant;
+mod constants;
+// mod exchange;
+
+// use self::constants::ZERO;
+// use self::constants::N;
+// use self::types::Address;
+// use self::types::Balance;
+// use self::types::token_address::TokenAddress;
+
+///
+/// The Curve Stableswap contract.
+///
+contract Stableswap {
+}

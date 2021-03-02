@@ -1,0 +1,69 @@
+use crate::constants::ZERO;
+use crate::constants::N;
+
+///
+/// The `D` invariant calculation function.
+///
+/// The function is quite generic and does not work on token balances directly.
+/// The only requirement for the `values` is to be of the same precision
+/// to avoid incorrect amplification.
+///
+pub fn calculate(
+    values: [u248; N],
+    amplifier: u64,
+) -> u248 {
+    let mut sum = ZERO;
+    for i in 0..N {
+        sum += values[i];
+    }
+
+    if sum != ZERO {
+        let mut D_prev = ZERO;
+        let mut D = sum;
+
+        // A * N
+        let amplifier_N: u248 = amplifier * (N as u64);
+
+        for _n in 0..15 while
+        // NOTE: WTF?
+            (D > D_prev && D - D_prev > 0) ||
+            (D <= D_prev && D_prev - D > ZERO)
+        {
+            let mut D_P = D;
+
+            for i in 0..N {
+                // +1 is to prevent division by 0
+                D_P = D_P * D / (values[i] * (N as u248) + 1);
+            }
+            /*
+            i = 0
+            D_P = D * D / (val[0] * N + 1)
+            
+            i = 1
+            D_P = D_P * D / (val[1] * N + 1)
+                = D ^ 3 / ((val[0] * N + 1) * (val[1] * N + 1))
+
+            i = 2
+            D_P = D_P * D / (val[2] * N + 1)
+                = D ^ 4 / ((val[0] * N + 1) ... (val[2] * N + 1))
+            
+            i = N - 1
+            D_P = D ^ ((N - 1) + 2) / ((val[0] * N + 1) ... (val[N - 1] * N + 1))
+                = approximate D ^ (N + 1) / ((val[0] * ... * val[N - 1]) * N ^ N)
+            */
+
+            D_prev = D;
+            D = (amplifier_N * sum + D_P * (N as u248)) * D /
+                ((amplifier_N - 1) * D + ((N + 1) as u248) * D_P);
+            /*
+                   A * N * sum + D_P * N * D
+            D = -------------------------------
+                (A * N - 1) * D + (N + 1) * D_P
+            */
+        }
+
+        D
+    } else {
+        ZERO
+    }
+}

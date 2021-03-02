@@ -1,0 +1,4 @@
+pub mod token_address;
+
+pub type Address = u160;
+pub type Balance = u248;
